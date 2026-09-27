@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page { size: A4; margin: 0; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111111;
+            margin: 0;
+            padding: 40px 44px;
+            font-size: 13.5px;
+        }
+        .header { width: 100%; }
+        .header-table { width: 100%; border-collapse: collapse; }
+        .company-name { font-size: 22px; font-weight: bold; margin-bottom: 8px; }
+        .company-line { font-size: 12.5px; line-height: 1.5; }
+        .logo-box {
+            background: #243b6b;
+            border-radius: 4px;
+            padding: 10px 14px;
+            width: 150px;
+            height: 110px;
+            text-align: center;
+        }
+        .logo-box img { max-width: 130px; max-height: 90px; }
+        .title {
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 34px;
+            font-weight: bold;
+            margin: 26px 0 30px;
+        }
+        .columns { width: 100%; border-collapse: collapse; }
+        .columns td { vertical-align: top; width: 50%; padding-right: 16px; }
+        .section-heading {
+            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .detail-line { margin: 3px 0; line-height: 1.35; font-size: 13.5px; }
+        .payment-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            margin: 26px 0 14px;
+        }
+        table.payment { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        table.payment th, table.payment td {
+            border: 1px solid #111111;
+            padding: 12px 8px;
+            text-align: center;
+        }
+        table.payment th { font-weight: bold; }
+        .amount-words { margin-top: 40px; }
+        .declaration { margin-top: 26px; font-size: 11px; line-height: 1.5; }
+        .declaration-title { font-weight: bold; letter-spacing: 0.5px; }
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: #333333;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="company-name" th:text="${receipt.companyName}">Union Reality and Constructions</div>
+                <div class="company-line" th:text="${receipt.companyAddress}"></div>
+                <div class="company-line">Email: <span th:text="${receipt.companyEmail}"></span></div>
+                <div class="company-line">Phone no. : <span th:text="${receipt.companyPhone}"></span></div>
+            </td>
+            <td style="text-align: right;">
+                <div class="logo-box">
+                    <img th:src="${receipt.logoDataUri}" alt="Union Reality and Constructions"/>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="title">Payment Receipt</div>
+
+<table class="columns">
+    <tr>
+        <td>
+            <div class="section-heading">PROPERTY DETAILS</div>
+            <div class="detail-line" th:if="${receipt.project != null}">
+                Project / Layout Name: <span th:text="${receipt.project}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.siteNo != null}">
+                Site No: <span th:text="${receipt.siteNo}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.measurement != null}">
+                Dimensions: <span th:text="${receipt.measurement}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.facing != null}">
+                Facing: <span th:text="${receipt.facing}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.location != null}">
+                Location: <span th:text="${receipt.location}"></span>
+            </div>
+        </td>
+        <td>
+            <div class="section-heading">CUSTOMER DETAILS</div>
+            <div class="detail-line" th:if="${receipt.clientName != null}">
+                Received From: <span th:text="${receipt.salutation + ' ' + receipt.clientName}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.mobile != null}">
+                Mobile Number: <span th:text="${receipt.mobile}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.customerEmail != null}">
+                Email: <span th:text="${receipt.customerEmail}"></span>
+            </div>
+            <div class="detail-line" th:if="${receipt.address != null}">
+                Address: <span th:text="${receipt.address}"></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div style="margin-top: 22px;">
+    <div class="section-heading">RECEIPT DETAILS</div>
+    <div class="detail-line" th:if="${receipt.receiptNo != null}">
+        Receipt No: <span th:text="${receipt.receiptNo}"></span>
+    </div>
+    <div class="detail-line">Date: <span th:text="${receipt.date}"></span></div>
+</div>
+
+<div class="payment-title">PAYMENT DETAILS</div>
+
+<table class="payment">
+    <thead>
+    <tr>
+        <th style="width: 58px;">Sl No.</th>
+        <th>Description</th>
+        <th style="width: 150px;">Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item, stat : ${receipt.items}">
+        <td th:text="${stat.index + 1}"></td>
+        <td th:text="${item.description}"></td>
+        <td th:text="'₹' + ${item.amountFormatted}"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><strong>Total</strong></td>
+        <td><strong th:text="'₹' + ${receipt.totalFormatted}"></strong></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="amount-words">
+    <strong>Amount in Words :</strong>
+    <span th:text="${receipt.amountInWords}"></span>
+</div>
+
+<div class="declaration">
+    <div class="declaration-title">DECLARATION</div>
+    <div>
+        Received the above amount towards the purchase of the above-mentioned property, subject to
+        the terms and conditions of the sale agreement.
+    </div>
+</div>
+
+<div class="footer-note">System generated bill and signature not required</div>
+</body>
+</html>
