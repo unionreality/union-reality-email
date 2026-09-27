@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
@@ -65,7 +66,11 @@ public class BookingEmailService {
 
         String attachmentName = (StringUtils.hasText(model.receiptNo()) ? model.receiptNo().trim() : "payment-receipt")
                 + ".pdf";
-        helper.addAttachment(attachmentName, () -> pdfBytes, "application/pdf");
+        helper.addAttachment(
+                attachmentName,
+                () -> new ByteArrayInputStream(pdfBytes),
+                "application/pdf"
+        );
 
         mailSender.send(message);
     }

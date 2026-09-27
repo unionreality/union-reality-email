@@ -26,7 +26,7 @@ server:
 email-service:
   from-address: ${MAIL_FROM:sales@unionrealityandconstructions.com}
   from-name: ${MAIL_FROM_NAME:Union Reality and Constructions}
-  cc-addresses: ${MAIL_CC:accounts@unionrealityandconstructions.com}
+  cc-addresses: ${MAIL_CC:}
   bcc-chaitra: ${MAIL_BCC_CHAITRA:chaitra@unionrealityandconstructions.com}
   cors-allowed-origins: ${CORS_ALLOWED_ORIGINS:https://www.unionrealityandconstructions.com,https://unionrealityandconstructions.com,http://localhost:5173,http://localhost:3000}
   email-subject-prefix: ${EMAIL_SUBJECT_PREFIX:Booking confirmation}
